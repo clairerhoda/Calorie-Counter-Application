@@ -26,20 +26,31 @@ struct DetailView: View {
                 Text(totalEaten ?? calories.totalCalories).foregroundColor(.red)
                     .font(Font.custom("Charter-Black", size: 16)).multilineTextAlignment(.center)
             }
+            
             if calories.totalCalories != "Enter the correct inputs!" && calories.totalCalories != "Enter Male or Female for gender input!"{
                 Text("Total Calories Available to Consume").foregroundColor(.black).padding(.bottom, 10)
                     .font(Font.custom("Charter-Black", size: 20)).multilineTextAlignment(.center)
-                Text(totalEaten ?? calories.totalCalories).foregroundColor(lightPink)
-                    .font(Font.custom("Charter-Black", size: 25)).shadow(color: lighterPink, radius: 1)
-
-                TextField("Add calories of food item here", text: $caloriesEaten)
+                if self.totalEaten != nil {
+                    if self.totalEaten == "0" {
+                        Text(totalEaten ?? calories.totalCalories).foregroundColor(.red)
+                            .font(Font.custom("Charter-Black", size: 25)).shadow(color: .black, radius: 1)
+                    } else {
+                        Text(totalEaten ?? calories.totalCalories).foregroundColor(lightPink)
+                            .font(Font.custom("Charter-Black", size: 25)).shadow(color: lighterPink, radius: 1)
+                    }
+                } else {
+                    Text(totalEaten ?? calories.totalCalories).foregroundColor(lightPink)
+                        .font(Font.custom("Charter-Black", size: 25)).shadow(color: lighterPink, radius: 1)
+                }
+        
+               TextField("Add calories of food item here", text: $caloriesEaten)
                     .font(Font.custom("Charter-Black", size: 14)).padding(.all, 3)
                     .background(lighterPink).padding(.horizontal, 20)
                     .foregroundColor(.black).textFieldStyle(RoundedBorderTextFieldStyle()).padding(.bottom, 10)
                 HStack{
                     Button(action: {
                         btnStr = "Calculating"
-                        if caloriesEaten != ""{
+                        if caloriesEaten != "" && Int(caloriesEaten)! > 0 {
                             self.totalEaten = subtractCalories(caloriesEaten: Int(caloriesEaten)!, totalCalories: Int(self.totalEaten ?? calories.totalCalories)!)
                         }
                         btnStr = "Calculate Calories"
@@ -50,6 +61,12 @@ struct DetailView: View {
                             .font(Font.custom("Charter-Black", size: 16)).padding(5).border(Color.black)
                     }).background(lightPink).padding(.trailing, 10)
                 }.frame(maxWidth: .infinity, alignment: Alignment.trailing)
+                if self.totalEaten != nil {
+                    if self.totalEaten == "0" {
+                        Text("Calories for the day reached! Drink water and get some rest.").foregroundColor(.black)
+                            .font(Font.custom("Charter-Black", size: 16)).shadow(color: lightPink, radius: 1).multilineTextAlignment(.center)
+                    }
+                }
             }
             
         }.padding(.bottom, 25).navigationBarItems(leading: HStack {
